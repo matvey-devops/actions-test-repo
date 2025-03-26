@@ -1,8 +1,13 @@
 # Git
 .git
 .gitignore
+.github/
 
 # Virtual environment
+app/venv/
+app/.venv/
+app/.env/
+app/env/
 venv/
 .env/
 .venv/
@@ -13,6 +18,11 @@ ENV/
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
 
 # IDE files
 .idea/
@@ -27,6 +37,14 @@ Thumbs.db
 # Logs
 *.log
 
-# Docker
+# Documentation and README
+README.md
+docs/
+
+# Игнорируем директории с тестами при сборке продакшн-образа
+app/tests/
+
+# Docker files
 Dockerfile
+docker-compose.yml
 .dockerignore 

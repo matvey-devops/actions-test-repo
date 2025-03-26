@@ -1,35 +1,90 @@
-# Простое Веб-Приложение
+# Flask Docker CI/CD Demo
 
-Это простое веб-приложение на Flask, которое работает на порту 7890.
+Демонстрационный проект Flask приложения с настройкой CI/CD через GitHub Actions.
 
-## Запуск приложения локально
+## Описание
 
-1. Установите зависимости:
+Этот проект демонстрирует полный цикл CI/CD для Flask приложения:
 
-   ```
-   pip install -r app/requirements.txt
-   ```
+- Автоматическое тестирование
+- Сборка Docker-образа
+- Публикация образа в Docker Hub
+- Проверка образа на уязвимости
 
-2. Запустите приложение:
+## Требования
 
-   ```
-   python app/main.py
-   ```
+- Docker
+- Python 3.9+
+- GitHub аккаунт (для GitHub Actions)
+- Docker Hub аккаунт (для публикации образа)
 
-3. Откройте браузер и перейдите по адресу: <http://localhost:7890>
+## Локальная разработка
 
-## Запуск в Docker
+### Настройка окружения
 
-1. Соберите Docker-образ:
+```bash
+# Клонировать репозиторий
+git clone <url-вашего-репозитория>
+cd <название-репозитория>
 
-   ```
-   docker build -t simple-webapp .
-   ```
+# Создать виртуальное окружение
+python -m venv venv
+source venv/bin/activate  # На Windows: venv\Scripts\activate
 
-2. Запустите контейнер:
+# Установить зависимости
+pip install -r app/requirements.txt
+```
 
-   ```
-   docker run -p 7890:7890 simple-webapp
-   ```
+### Запуск тестов
 
-3. Откройте браузер и перейдите по адресу: <http://localhost:7890>
+```bash
+pytest app/tests/
+```
+
+### Запуск приложения локально
+
+```bash
+python app/main.py
+```
+
+## Использование Docker
+
+### Сборка образа
+
+```bash
+docker build -t actions-test .
+```
+
+### Запуск контейнера
+
+```bash
+docker run -p 7890:7890 actions-test
+```
+
+Приложение будет доступно по адресу <http://localhost:7890>
+
+## Настройка GitHub Actions
+
+1. Необходимо добавить в репозиторий следующие секреты:
+   - `DOCKERHUB_USERNAME` - имя пользователя Docker Hub
+   - `DOCKERHUB_TOKEN` - токен доступа Docker Hub
+
+2. GitHub Actions автоматически запустит процесс CI/CD при:
+   - Push в ветки `main` или `master`
+   - Создании Pull Request в эти ветки
+   - Ручном запуске через интерфейс GitHub
+
+## Структура проекта
+
+```
+.
+├── .github/workflows       # Конфигурация GitHub Actions
+│   └── docker-build-push.yml
+├── app                     # Исходный код приложения
+│   ├── main.py             # Основной файл приложения
+│   ├── requirements.txt    # Зависимости Python
+│   └── tests/              # Тесты
+├── Dockerfile              # Файл для сборки Docker-образа
+├── .dockerignore           # Список файлов, игнорируемых при сборке образа
+└── README.md               # Документация проекта
+```
