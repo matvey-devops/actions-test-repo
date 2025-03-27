@@ -21,6 +21,7 @@ jobs:
           registry: ghcr.io
         name: Docker login
 
+    
       - run: docker info
         name: Docker Info
 
