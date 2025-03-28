@@ -6,7 +6,6 @@ on:
   pull_request:
 
 env:
-  DOCKER_IMAGE: ghcr.io/${{ github.repository }}
   DOCKER_TAG  : ${{ github.ref_name }}-${{ github.sha }}
 
 jobs:
@@ -14,22 +13,15 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - name: Build & Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          username: ${{ github.event.repository.owner.login }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          image: ghcr.io/${{ github.repository }}
+          tags: ${{ env.DOCKER_TAG }}
           registry: ghcr.io
-        name: Docker login
-
-    
-      - run: docker info
-        name: Docker Info
-
-      - run: docker build -t ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }} .
-        name: Build
-
-      - run: docker push ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
-        name: Push
+          dockerfile: Dockerfile
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
 
 
